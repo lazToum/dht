@@ -91,4 +91,4 @@ while True and not (
         logging.warning(' Got KeyboardInterrupt ... stopping')
         sys.exit(0)
 
-sys.exit(int(errors_count) <= ERRORS_LIMIT)
+sys.exit(int(errors_count >= ERRORS_LIMIT))
