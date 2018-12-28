@@ -1,0 +1,10 @@
+[Unit]
+Description="Read humidity and temperature and publish to a mqtt broker"
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+ExecStart=%PREFIX%/bin/dht
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,4 @@
+Adafruit-DHT==1.4.0
+paho-mqtt==1.4.0
+PyJWT==1.4.2
+python-dotenv==0.10.1
