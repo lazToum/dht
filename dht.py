@@ -34,7 +34,8 @@ MQTT_USER = os.getenv('MQTT_USER', '')
 # the password to authenticating to the broker
 # (empty: jwt encode with the jwt secret, for emqx jwt.auth)
 _mqtt_password = os.getenv('MQTT_PASSWORD', '')
-MQTT_PASSWORD = _mqtt_password if (_mqtt_password != '' and MQTT_USER != '') else jwt.encode(
+MQTT_PASSWORD = _mqtt_password if (
+    _mqtt_password != '' and MQTT_USER != '') else jwt.encode(
     {'sensors': ['temperature', 'humidity']},
     JWT_SECRET,
     algorithm='HS256'
@@ -48,8 +49,9 @@ DHT_PIN = int(os.getenv('DHT_PIN', 4))
 errors_count = 0
 submissions = 0
 while True and not (
-        (0 < ERRORS_LIMIT <= errors_count) or
-        (0 < SUBMISSIONS_LIMIT <= submissions)):
+        0 < ERRORS_LIMIT <= errors_count
+        or 0 < SUBMISSIONS_LIMIT <= submissions
+        ):
     try:
         humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
         if humidity is not None and temperature is not None:
