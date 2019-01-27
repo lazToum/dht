@@ -12,7 +12,8 @@ from dotenv import load_dotenv
 
 
 logging.basicConfig(level="INFO")
-DOT_ENV_PATH = os.getenv('PREFIX', '/usr/local/share/dht.env')
+DOT_ENV_DIR = os.getenv('PREFIX', '/usr/local/share')
+DOT_ENV_PATH = os.path.join(DOT_ENV_DIR, 'dht.env')
 if os.path.exists(DOT_ENV_PATH):
     load_dotenv(dotenv_path=DOT_ENV_PATH)
 
@@ -29,9 +30,9 @@ MQTT_BROKER = os.getenv('MQTT_BROKER', 'iot.eclipse.org')
 MQTT_PORT = int(os.getenv('MQTT_PORT', 1883))
 # the jwt secret to encode for authenticating with emqx
 JWT_SECRET = os.getenv('JWT_SECRET', 'secret')
-# the user to authenticating to the broker (empty:  no authentication)
+# the user to authenticate to the broker (empty:  no authentication)
 MQTT_USER = os.getenv('MQTT_USER', '')
-# the password to authenticating to the broker
+# the password to authenticate to the broker
 # (empty: jwt encode with the jwt secret, for emqx jwt.auth)
 _mqtt_password = os.getenv('MQTT_PASSWORD', '')
 MQTT_PASSWORD = _mqtt_password if (
