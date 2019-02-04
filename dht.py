@@ -44,7 +44,7 @@ MQTT_PASSWORD = _mqtt_password if (
 
 # the dht sensor to use (DHT11, DHT22, AM2302)
 DHT_SENSOR = int(os.getenv('DHT_SENSOR', Adafruit_DHT.DHT11))
-# the data pin (on the board) of the dht sensor
+# the data pin (on the pi board) of the dht sensor
 DHT_PIN = int(os.getenv('DHT_PIN', 4))
 
 errors_count = 0
