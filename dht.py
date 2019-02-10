@@ -23,6 +23,7 @@ WAIT_INTERVAL = int(os.getenv('WAIT_INTERVAL', 2))
 SUBMISSIONS_LIMIT = int(os.getenv('SUBMISSIONS_LIMIT', -1))
 # maximum number of errors to accept before quitting (-1: no limit)
 ERRORS_LIMIT = int(os.getenv('ERRORS_LIMIT', -1))
+# the topic to use for publishing
 MQTT_TOPIC = os.getenv('MQTT_TOPIC', '/raspberry/dht/data/')
 # the hostname (or ip) of the mqtt broker
 MQTT_BROKER = os.getenv('MQTT_BROKER', 'iot.eclipse.org')
@@ -57,38 +58,34 @@ while True and not (
     )
 ):
     try:
-        humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+        humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)  # get sensor values
         if humidity is not None and temperature is not None:
-            try:
-                _now = datetime.now()
-                publish.single(
-                    topic=MQTT_TOPIC,
-                    payload=json.dumps(
-                        {
-                            'datetime': _now,
-                            'temperature': temperature,
-                            'humidity': humidity
-                        },
-                        default=str
-                    ),
-                    port=MQTT_PORT,
-                    hostname=MQTT_BROKER,
-                    auth={
-                        'username': MQTT_USER, 'password': MQTT_PASSWORD
-                    } if MQTT_USER != '' else None)
-                logging.info(
-                    'Temp={0:0.1f}*C, Humidity={1:0.1f}%, Datetime={2}'
-                    .format(
-                        temperature,
-                        humidity,
-                        _now.isoformat(' ')
-                    )
+            _now = datetime.now()
+            publish.single(
+                topic=MQTT_TOPIC,
+                payload=json.dumps(
+                    {
+                        'datetime': _now,
+                        'temperature': temperature,
+                        'humidity': humidity
+                    },
+                    default=str
+                ),
+                port=MQTT_PORT,
+                hostname=MQTT_BROKER,
+                auth={
+                    'username': MQTT_USER, 'password': MQTT_PASSWORD
+                } if MQTT_USER != '' else None)
+            logging.info(
+                'Temp={0:0.1f}*C, Humidity={1:0.1f}%, Datetime={2}'
+                .format(
+                    temperature,
+                    humidity,
+                    _now.isoformat(' ')
                 )
-                errors_count = 0
-                submissions += 1
-            except Exception as e:
-                logging.warning(e)
-                errors_count += 1
+            )
+            errors_count = 0
+            submissions += 1
         else:
             errors_count += 1
             logging.warning('Failed to read from the sensor!')
@@ -96,5 +93,8 @@ while True and not (
     except KeyboardInterrupt:
         logging.warning(' Got KeyboardInterrupt ... stopping')
         sys.exit(0)
+    except Exception as e:
+        logging.error(e)
+        sys.exit(1)
 
 sys.exit(int(errors_count >= ERRORS_LIMIT))
