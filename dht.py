@@ -21,7 +21,7 @@ if os.path.exists(DOT_ENV_PATH):
 WAIT_INTERVAL = int(os.getenv('WAIT_INTERVAL', 2))
 # maximum number of values to publish ( -1: no limit)
 SUBMISSIONS_LIMIT = int(os.getenv('SUBMISSIONS_LIMIT', -1))
-# maximum number of errors to accept before quitting (-1: no limit)
+# maximum number of errors to accept before exiting (-1: no limit)
 ERRORS_LIMIT = int(os.getenv('ERRORS_LIMIT', -1))
 # the topic to use for publishing
 MQTT_TOPIC = os.getenv('MQTT_TOPIC', '/raspberry/dht/data/')
